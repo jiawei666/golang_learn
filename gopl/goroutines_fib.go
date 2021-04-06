@@ -1,7 +1,8 @@
-package gopl
+package main
 
 import (
 	"fmt"
+	"time"
 )
 
 func main() {
