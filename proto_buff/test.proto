@@ -1,0 +1,25 @@
+syntax = "proto3"; // 指定proto的版本，默认proto2
+
+package test.proto; // 定义包名(import path)，防止message重名
+option go_package = "/";
+// 定义message（可以定义多个消息类型）
+message Person {
+  int32 id = 1;
+  string name = 2;
+  repeated string phone_number = 3; // 一个人会有多个电话
+
+  Gender gender = 4; // 使用Gender枚举类型
+  Date birthday = 5; // 使用message类型作为字段的type
+  // 定义枚举类型
+  enum Gender {
+    FEMAIL = 0; // 必须从0开始
+    MAIL = 1;
+  }
+}
+
+// 定义消息类型Date:生日
+message Date {
+  int32 year = 1;
+  int32 mounth = 2;
+  int32 day = 3;
+}
