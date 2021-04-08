@@ -3,7 +3,9 @@ package main
 import (
 	"fmt"
 	"log"
+	"net"
 	"net/rpc"
+	"net/rpc/jsonrpc"
 )
 
 type HelloServiceInterface = interface {
@@ -11,7 +13,7 @@ type HelloServiceInterface = interface {
 }
 
 type HelloServiceClient struct {
-	*rpc.Client
+	Client *rpc.Client
 }
 
 var _ HelloServiceInterface = (*HelloServiceClient)(nil)
@@ -30,15 +32,16 @@ func (p *HelloServiceClient) Hello(request string, reply *string) error {
 	return p.Client.Call(HelloServiceName+".Hello", request, reply)
 }
 
-
 func main() {
-	client, err := DialHelloService("tcp", "localhost:1234")
+	conn, err := net.Dial("tcp", "localhost:1234")
 	if err != nil {
-		log.Fatal("dialing:", err)
+		log.Fatal("net.Dial:", err)
 	}
 
+	client := rpc.NewClientWithCodec(jsonrpc.NewClientCodec(conn))
+
 	var reply string
-	err = client.Hello("hello", &reply)
+	err = client.Call(HelloServiceName+".Hello", "hello", &reply)
 	if err != nil {
 		log.Fatal(err)
 	}

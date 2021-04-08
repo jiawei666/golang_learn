@@ -4,6 +4,7 @@ import (
 	"log"
 	"net"
 	"net/rpc"
+	"net/rpc/jsonrpc"
 )
 
 const HelloServiceName = "path/to/pkg.HelloService"
@@ -16,7 +17,7 @@ func RegisterHelloService(svc HelloServiceInterface) error {
 	return rpc.RegisterName(HelloServiceName, svc)
 }
 
-type HelloService struct {}
+type HelloService struct{}
 
 func (p *HelloService) Hello(request string, reply *string) error {
 	*reply = "hello:" + request
@@ -31,11 +32,12 @@ func main() {
 		log.Fatal("ListenTCP error:", err)
 	}
 
-	conn, err := listener.Accept()
-	if err != nil {
-		log.Fatal("Accept error:", err)
+	for {
+		conn, err := listener.Accept()
+		if err != nil {
+			log.Fatal("Accept error:", err)
+		}
+
+		go rpc.ServeCodec(jsonrpc.NewServerCodec(conn))
 	}
-
-	rpc.ServeConn(conn)
 }
-
