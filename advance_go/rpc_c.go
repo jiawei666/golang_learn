@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"jiawei666/golang_learn/advance_go/mytype"
 	"log"
 	"net"
 	"net/rpc"
@@ -9,7 +10,7 @@ import (
 )
 
 type HelloServiceInterface = interface {
-	Hello(request string, reply *string) error
+	Hello(request *mytype.String, reply *mytype.String) error
 }
 
 type HelloServiceClient struct {
@@ -28,7 +29,7 @@ func DialHelloService(network, address string) (*HelloServiceClient, error) {
 
 const HelloServiceName = "path/to/pkg.HelloService"
 
-func (p *HelloServiceClient) Hello(request string, reply *string) error {
+func (p *HelloServiceClient) Hello(request *mytype.String, reply *mytype.String) error {
 	return p.Client.Call(HelloServiceName+".Hello", request, reply)
 }
 
@@ -40,8 +41,8 @@ func main() {
 
 	client := rpc.NewClientWithCodec(jsonrpc.NewClientCodec(conn))
 
-	var reply string
-	err = client.Call(HelloServiceName+".Hello", "hello", &reply)
+	var reply mytype.String
+	err = client.Call(HelloServiceName+".Hello", mytype.String{Value: "jiawei"}, &reply)
 	if err != nil {
 		log.Fatal(err)
 	}
