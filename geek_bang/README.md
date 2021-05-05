@@ -34,3 +34,21 @@
    2. 使用小接口组合成大接口
    3. 只依赖必要功能的小接口
     
+#### 错误机制
+1. 要点
+![](./img/错误机制.png)
+   
+2. panic
+![](./img/panic.png)
+   
+#### 包管理
+1. package
+![](./img/package.png)
+   
+2. init函数
+![](./img/package_init.png)
+   
+3. 获取远程package
+```shell
+go get ...
+```
