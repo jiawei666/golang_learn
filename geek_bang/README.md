@@ -52,3 +52,7 @@
 ```shell
 go get ...
 ```
+
+#### 并发编程
+1. channel机制
+![](./img/channel.png)
